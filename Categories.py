@@ -1,5 +1,6 @@
 import random
 
+# Defines the Categories
 categories = {
     'Metalcore Bands': ['Architects','Currents','Volumes','Imminence'],
     'Sith Lords (Darth______)': ['Sion','Tenebrae','Kreia','Bane'],
@@ -23,11 +24,13 @@ categories = {
     'Haggis Ingredients': ["Pluck","Oatmeal","Onions","Suet"]
 }
 
+max_length = max(len(word) for words in categories.values() for word in words)
+
 grid = []
 for _ in range(4):
     category = random.choice(list(categories.keys()))
     words = categories[category]
-    grid.append(words)
+    grid.append([word.center(max_length) for word in words])
 
 # Print the grid
 for row in grid:
