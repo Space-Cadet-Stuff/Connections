@@ -1,3 +1,5 @@
+import random
+
 categories = {
     'Metalcore Bands': ['Architects','Currents','Volumes','Imminence'],
     'Sith Lords (Darth______)': ['Sion','Tenebrae','Kreia','Bane'],
@@ -20,3 +22,13 @@ categories = {
     'Alice In Chains Songs': ["Would","Nutshell","Hollow","Rooster"],
     'Haggis Ingredients': ["Pluck","Oatmeal","Onions","Suet"]
 }
+
+grid = []
+for _ in range(4):
+    category = random.choice(list(categories.keys()))
+    words = categories[category]
+    grid.append(words)
+
+# Print the grid
+for row in grid:
+    print("|".join(row))
