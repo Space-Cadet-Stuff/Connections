@@ -19,19 +19,32 @@ categories = {
     'Probes to Saturn': ['Voyager','Cassini','Pioneer','Huygens'],
     'Cheese': ['Swiss','Cottage','Cream','Blue'],
     'Musician Nicknames': ['Sting','Slash','Flea','Bonzo'],
-    'Fish Species': ["Bass","Pike","Shad","Snook"],
-    'Alice In Chains Songs': ["Would","Nutshell","Hollow","Rooster"],
-    'Haggis Ingredients': ["Pluck","Oatmeal","Onions","Suet"]
+    'Fish Species': ['Bass','Pike','Shad','Snook'],
+    'Alice In Chains Songs': ['Would','Nutshell','Hollow','Rooster'],
+    'Haggis Ingredients': ['Pluck','Oatmeal','Onions','Suet'],
+    'Guitar Brands': ['Ibanez','Gibson','Jackson','Fender'],
+    'Verb in the name of a Star Wars movie': ['Attack', 'Return', 'Revenge','Awaken'],
+
 }
+grid = []
+row = []
+
+chosen_categories = {}
+while len(chosen_categories) < 4:#Picks 4 random categories
+        random_choice = random.choice(list(categories.keys()))
+        if random_choice not in list(chosen_categories.keys()):
+            chosen_categories[random_choice] = categories[random_choice]
+
+category_words=[word for words in chosen_categories for word in chosen_categories[words]]
 
 max_length = max(len(word) for words in categories.values() for word in words)
 
-grid = []
-for _ in range(4):
-    category = random.choice(list(categories.keys()))
-    words = categories[category]
-    grid.append([word.center(max_length) for word in words])
+for word in range(4):
+    row = []
+    for word in range(4):
+        row.append(category_words.pop(random.randint(0, len(category_words)-1)))
+    grid.append(row)
 
 # Print the grid
 for row in grid:
-    print("|".join(row))
+    print("|".join([word.center(max_length) for word in row]))
