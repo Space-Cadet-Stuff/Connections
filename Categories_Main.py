@@ -1,8 +1,9 @@
-import random
+import random# Imports the random library allowing for random selection
+from time import sleep# Imports the sleep function from the time module, allowing for timed pauses in the command line
+import webbrowser# Imports the webbrowser library, letting the game open links in your broswer
 
-# Defines the Categories
-categories = {
-    "Metalcore Bands": ["Architects","Currents","Volumes","Imminence"],
+categories = {# Defines the Categories
+    "Metalcore Bands": ["Architects","Currents","Volumes","Imminence"],# "Category": ["Word 1","Word 2","Word 3","Word 4"]
     "Sith Lords (Darth______)": ["Sion","Tenebrae","Kreia","Bane"],
     "Rockets":["Titan","Ariane","Antares","Saturn"],
     "STARSET Albums": ["Transmissions","Vessels","Horizons","Divisions"],
@@ -31,7 +32,7 @@ categories = {
     "Lunar Oceans": ["Tranquility","Serenity","Showers","Crises"],
     "Martian Rovers": ["Curiosity","Opportunity","Perseverance","Spirit"],
     "Industrial Metal Artists": ["Zombie","Manson","Landers","Reznor"],
-    "Palindromes": ["Racecar","Refer","Rotator","Defied"],
+    "Palindromes": ["Racecar","Refer","Rotator","Deified"],
     "Navigation Instruments": ["Sextant","Radar","Compass","Chronometer"],
     "Constellations": ["Starlink","Orion","Saggitarius","Ursa"],
     "Fire Types": ["Electrical","Oil","Grease","Liquid"],
@@ -56,7 +57,7 @@ categories = {
 }
 grid = []# Creates an empty list to be used later
 lives = 4# Sets the amount of lives for later on
-def chooseWords():
+def chooseWords():# Chooses the words to make the grid
     random_keys = random.sample(list(categories.keys()), 4)# Select 4 random keys
 
     selected_words = []# Create an array to store lists of words for each selected category
@@ -83,6 +84,9 @@ def printGrid():# Prints the grid out in the command line and adds breaks to the
     selected_words, all_words = chooseWords()# Calls the chooseWords function to select random categories and words
     grid, max_length = makeGrid(all_words)# Calls the makeGrid function to create the grid using the selected words
     
+    for words_list in selected_words:# Iterates for each array
+        print(words_list)# Prints one of the word lists in the array
+
     print("---------------------------------------------------------")# Prints a horizontal line to separate the grid on the first line
     for row in grid:# Iterates over each row in the grid
         print("|"+"|".join([word.center(max_length) for word in row])+"|")# Prints a Divider between each word and centers each word while making the box the max length, creating a uniform grid
