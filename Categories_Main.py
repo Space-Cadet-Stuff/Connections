@@ -1,9 +1,9 @@
-import random# Imports the random library allowing for random selection
-from time import sleep# Imports the sleep function from the time module, allowing for timed pauses in the command line
-import webbrowser# Imports the webbrowser library, letting the game open links in your broswer
+import random
+from time import sleep
+import webbrowser
 
-categories = {# Defines the Categories
-    "Metalcore Bands": ["Architects","Currents","Volumes","Imminence"],# "Category": ["Word 1","Word 2","Word 3","Word 4"]
+categories = {
+    "Metalcore Bands": ["Architects","Currents","Volumes","Imminence"],
     "Sith Lords (Darth______)": ["Sion","Tenebrae","Kreia","Bane"],
     "Rockets":["Titan","Ariane","Antares","Saturn"],
     "STARSET Albums": ["Transmissions","Vessels","Horizons","Divisions"],
@@ -55,47 +55,47 @@ categories = {# Defines the Categories
     "Alloys": ["Brass","Bronze","Solder","Pewter"],
     "Lightsaber Combat Forms": ["Ataru","Shien","Makashi","Soresu"],
 }
-grid = []# Creates an empty list to be used later
-lives = 4# Sets the amount of lives for later on
-def chooseWords():# Chooses the words to make the grid
-    random_keys = random.sample(list(categories.keys()), 4)# Select 4 random keys
+grid = []
+lives = 4
+def chooseWords():
+    random_keys = random.sample(list(categories.keys()), 4)
 
-    selected_words = []# Create an array to store lists of words for each selected category
+    selected_words = []
 
-    all_words = []# Create a list to store all words in the selected categories
+    all_words = []
 
-    for key in random_keys:# Iterate over the selected keys and extract the corresponding lists of words
-        selected_words.append(categories[key])# Adds the selected categories to a list called selected_words
-        all_words.extend(categories[key])# adds the words in the categories to a large list for generating the grid
+    for key in random_keys:
+        selected_words.append(categories[key])
+        all_words.extend(categories[key])
 
-    random.shuffle(all_words)# Randomize the order of all words
-    return selected_words, all_words# Returns the selected categories and list of all words for later use
+    random.shuffle(all_words)
+    return selected_words, all_words
 
-def makeGrid(all_words):# Generates the grid for the printGrid function
-    max_length = max(len(word) for words in categories.values() for word in words)# Finds the length of the largest word in the dictionary
-    for word in range(4):# Iterates over each row in the grid
-        row = []# Creates an empty list to store words for the current row
-        for word in range(4):# Iterates over each word in the current row
-            row.append(all_words.pop(random.randint(0, len(all_words)-1)))# Remove a random word from the list of all words and append it to the current row
-        grid.append(row)# Adds the completed row to the grid
-    return grid, max_length# Returns the completed grid and the maximum length of words
+def makeGrid(all_words):
+    max_length = max(len(word) for words in categories.values() for word in words)
+    for word in range(4):
+        row = []
+        for word in range(4):
+            row.append(all_words.pop(random.randint(0, len(all_words)-1)))
+        grid.append(row)
+    return grid, max_length
 
-def printGrid():# Prints the grid out in the command line and adds breaks to the words to give a boxed look to it
-    selected_words, all_words = chooseWords()# Calls the chooseWords function to select random categories and words
-    grid, max_length = makeGrid(all_words)# Calls the makeGrid function to create the grid using the selected words
+def printGrid():
+    selected_words, all_words = chooseWords()
+    grid, max_length = makeGrid(all_words)
     
-    for words_list in selected_words:# Iterates for each array
-        print(words_list)# Prints one of the word lists in the array
+    for words_list in selected_words:
+        print(words_list)
 
-    print("---------------------------------------------------------")# Prints a horizontal line to separate the grid on the first line
-    for row in grid:# Iterates over each row in the grid
-        print("|"+"|".join([word.center(max_length) for word in row])+"|")# Prints a Divider between each word and centers each word while making the box the max length, creating a uniform grid
-        print("---------------------------------------------------------")# Prints a horizontal line to seperate each 
+    for row in grid:
+        print("---------------------------------------------------------")
+        print("|"+"|".join([word.center(max_length) for word in row])+"|")
+        print("---------------------------------------------------------")
 
-def getGuess():# Takes and logs the players guess
-    guesses = []#Creates an empty array to store the guesses
-    for i in range(4):# Iterates over loop 4 times
-        guess = input("Enter Guesses ")# Asks for user input
-        guesses.append(guess)# Adds user input to the guesses array
-    return guesses# Returns the player guesses for later
+def getGuess():
+    guesses = []
+    for i in range(4):
+        guess = input("Enter Guesses ")
+        guesses.append(guess)
+    return guesses
 printGrid()
