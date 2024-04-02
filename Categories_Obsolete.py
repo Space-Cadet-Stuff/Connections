@@ -68,8 +68,8 @@ def checkGuess(guesses):
             if word not in guesses:
                 valid = False
     # clue for josh
-    # get the four words
-    # put them in an array
+    # get the four words✔️
+    # put them in an array ✔️
     # you need to refer to the original 4 categories
     # the dictionaries themselves and specifically the word lists inside of them
     # e.g.

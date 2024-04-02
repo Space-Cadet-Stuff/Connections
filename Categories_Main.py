@@ -1,3 +1,4 @@
+
 import random
 from time import sleep
 import webbrowser
@@ -80,7 +81,7 @@ def makeGrid(all_words):
         grid.append(row)
     return grid, max_length
 
-def printGrid():
+def printGrid(all_words, selected_words):
     selected_words, all_words = chooseWords()
     grid, max_length = makeGrid(all_words)
     
@@ -92,10 +93,19 @@ def printGrid():
         print("|"+"|".join([word.center(max_length) for word in row])+"|")
         print("---------------------------------------------------------")
 
-def getGuess():
+def getGuesses(all_words):
+    print("Words to choose from: ", all_words)
     guesses = []
-    for i in range(4):
-        guess = input("Enter Guesses ")
-        guesses.append(guess)
+    while len(guesses) < 4:
+        guess = input("Enter a word: ")
+        if guess in all_words:
+            guesses.append(guess)
+            print("Guesses: ",guesses)
+        else:   
+            print("Invalid word. Please try again.")
     return guesses
-printGrid()
+
+
+selected_words, all_words = chooseWords()
+printGrid(all_words, selected_words)
+getGuesses(all_words)
