@@ -103,6 +103,7 @@ def printGrid(all_words, selected_words):
 
 
 def getGuesses(all_words_copy, selected_words):
+    global lives
     print("(Case Sensetive) Words to choose from: ", all_words_copy)
     guesses = []
     correct = False
@@ -119,13 +120,14 @@ def getGuesses(all_words_copy, selected_words):
                 else:
                     print("Invalid word. Please try again.")
         for words_list in selected_words:
-                if set(guesses) == words_list:
+                if set(guesses) == set(words_list):
                     correct = True
                     print ("Category Correct!")
                     break
-                else:
-                    print("Incorrect guesses. Please try again.")
-                    guesses = []
+        if correct != True:
+            lives -= 1
+            print("Incorrect guesses. Please try again. Lives = ",lives)
+            guesses = []
     return guesses
 
 selected_words, all_words, all_words_copy = chooseWords()
