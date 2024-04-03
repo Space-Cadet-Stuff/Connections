@@ -2,6 +2,7 @@
 import random
 from time import sleep
 import webbrowser
+import difflib# Used to check for close words if the program doesnt rcognise an input. Suggestion and Implementation by ChatGPT
 
 categories = {
     "Metalcore Bands": ["Architects","Currents","Volumes","Imminence"],
@@ -9,7 +10,7 @@ categories = {
     "Rockets":["Titan","Ariane","Antares","Saturn"],
     "STARSET Albums": ["Transmissions","Vessels","Horizons","Divisions"],
     "Characters in Greek Mythology": ["Prometheus","Hercules","Ares","Alecto"],
-    "Creature in a Horror movie name, Silence of the LAMBS, The Human CENTIPEDE, ALIEN, BIRD Box": ["Lambs","Centipede","Alien","Bird"],
+    "Creature in the Name of a Horror Movie": ["Lambs","Centipede","Alien","Bird"],
     "Incects": ["Grasshopper","Bee","Wasp","Spitfire"],
     "US Aircraft": ["Thunderbolt","Blackbird","Lightning","Raider"],
     "Bird Species": ["Wren","Sparrow","Owl","Emu"],
@@ -19,7 +20,7 @@ categories = {
     "Polyatomic Anions": ["Sulphate","Oxide","Fluoride","Chloride"],
     "Extraterrestrial Mountain Ranges, ______ Montes": ["Caloris","Mithrim","Tenzing","Taurus"],
     "Probes to Saturn": ["Voyager","Cassini","Pioneer","Huygens"],
-    "Cheese": ["Swiss","Cottage","Cream","Blue"],
+    "Cheese": ["Swiss","Cottage","Cream","Brie"],
     "Musician Nicknames": ["Sting","Slash","Flea","Bonzo"],
     "Fish Species": ["Bass","Pike","Shad","Snook"],
     "Alice In Chains Songs": ["Would","Nutshell","Hollow","Rooster"],
@@ -31,7 +32,7 @@ categories = {
     "First four lightsaber colours seen in Star Wars": ["Green","Blue","Red","Purple"],
     "Multi Bladed Lightsaber Variants": ["Rotary", "Saberstaff", "Crossguard ", "Folding"],
     "Lunar Oceans": ["Tranquility","Serenity","Showers","Crises"],
-    "Martian Rovers": ["Curiosity","Opportunity","Perseverance","Spirit"],
+    "US Martian Rovers": ["Curiosity","Opportunity","Perseverance","Spirit"],
     "Industrial Metal Artists": ["Zombie","Manson","Landers","Reznor"],
     "Palindromes": ["Racecar","Refer","Rotator","Deified"],
     "Navigation Instruments": ["Sextant","Radar","Compass","Chronometer"],
@@ -58,6 +59,7 @@ categories = {
 }
 grid = []
 lives = 4
+
 def chooseWords():
     random_keys = random.sample(list(categories.keys()), 4)
 
@@ -65,47 +67,67 @@ def chooseWords():
 
     all_words = []
 
+    all_words_copy = []
+
     for key in random_keys:
         selected_words.append(categories[key])
         all_words.extend(categories[key])
 
     random.shuffle(all_words)
-    return selected_words, all_words
+    all_words_copy = all_words.copy()
+    return selected_words, all_words, all_words_copy
+
 
 def makeGrid(all_words):
-    max_length = max(len(word) for words in categories.values() for word in words)
+    max_length = max(len(word) for words in categories.values() for word in words)#From ChatGPT. Finds length of longest word
     for word in range(4):
         row = []
         for word in range(4):
-            row.append(all_words.pop(random.randint(0, len(all_words)-1)))
+            row.append(all_words.pop(random.randint(0, len(all_words) - 1)))
         grid.append(row)
     return grid, max_length
 
+
 def printGrid(all_words, selected_words):
-    selected_words, all_words = chooseWords()
     grid, max_length = makeGrid(all_words)
-    
+
     for words_list in selected_words:
         print(words_list)
 
+
+
     for row in grid:
         print("---------------------------------------------------------")
-        print("|"+"|".join([word.center(max_length) for word in row])+"|")
+        print("|" + "|".join([word.center(max_length) for word in row]) + "|")
         print("---------------------------------------------------------")
 
-def getGuesses(all_words):
-    print("Words to choose from: ", all_words)
+
+def getGuesses(all_words_copy, selected_words):
+    print("(Case Sensetive) Words to choose from: ", all_words_copy)
     guesses = []
-    while len(guesses) < 4:
-        guess = input("Enter a word: ")
-        if guess in all_words:
-            guesses.append(guess)
-            print("Guesses: ",guesses)
-        else:   
-            print("Invalid word. Please try again.")
+    correct = False
+    while correct == False:
+        while len(guesses) < 4:
+            guess = input("Enter a word: ")
+            if guess in all_words_copy:
+                guesses.append(guess)
+                print("Guesses: ", guesses)
+            else:
+                closest_match = difflib.get_close_matches(guess, all_words_copy, n=1)#Using Difflib to find close matches for spelling discrepancies
+                if closest_match:
+                    print(f"Did you mean '{closest_match[0]}'? Please try again.")
+                else:
+                    print("Invalid word. Please try again.")
+        for words_list in selected_words:
+                if set(guesses) == words_list:
+                    correct = True
+                    print ("Category Correct!")
+                    break
+                else:
+                    print("Incorrect guesses. Please try again.")
+                    guesses = []
     return guesses
 
-
-selected_words, all_words = chooseWords()
+selected_words, all_words, all_words_copy = chooseWords()
 printGrid(all_words, selected_words)
-getGuesses(all_words)
+getGuesses(all_words_copy, selected_words)
