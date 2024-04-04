@@ -1,3 +1,5 @@
+![Logo](https://imgur.com/a/IqfJE0V)
+
 
 # CONNECTIONS
 
@@ -14,9 +16,4 @@ A clone of the NYT game Connections, coded for the command line using python scr
 ## License
 
 [Unlicensed](https://choosealicense.com/licenses/unlicense/)
-
-
-## Screenshots
-
-![App Screenshot](https://imgur.com/a/IqfJE0V)
 
