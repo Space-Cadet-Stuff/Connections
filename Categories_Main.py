@@ -30,7 +30,7 @@ categories = {
     "Famous Scientists": ["Tesla","Eddison","Curie","Newton"],
     "Songs starting with 'S' from System of a Down's self titled Album": ["Spiders","Sugar","Suggestions","Soil"],
     "First four lightsaber colours seen in Star Wars": ["Green","Blue","Red","Purple"],
-    "Multi Bladed Lightsaber Variants": ["Rotary", "Saberstaff", "Crossguard ", "Folding"],
+    "Multi Bladed Lightsaber Variants": ["Rotary", "Saberstaff", "Crossguard", "Folding"],
     "Lunar Oceans": ["Tranquility","Serenity","Showers","Crises"],
     "US Martian Rovers": ["Curiosity","Opportunity","Perseverance","Spirit"],
     "Industrial Metal Artists": ["Zombie","Manson","Landers","Reznor"],
@@ -47,7 +47,6 @@ categories = {
     "Galilean Moons": ["Ganymede","Europa","Io","Callisto"],
     "Nebulae": ["Helix","Orion","Carina","Veil"],
     "Seas": ["Caribbean","Adriatic","Mediterranean","Tasman"],
-    "Best Teachers at Saints 👍": ["Pollard","Oates","Laforest","Egger"],
     "Shipwrecks": ["Titanic","Endurance","Bismarck","Victory"],
     "Large Manmade Non-Nuclear Explosions": ["Hindenburg","N1","Beirut","Blowdown"],
     "Nu Metal Bands": ["Skillet","Korn","Disturbed","Slipknot"],
@@ -59,24 +58,19 @@ categories = {
 }
 grid = []
 lives = 4
+playgame = True
 
 def chooseWords():
     random_keys = random.sample(list(categories.keys()), 4)
-
     selected_words = []
-
     all_words = []
-
     all_words_copy = []
-
     for key in random_keys:
         selected_words.append(categories[key])
         all_words.extend(categories[key])
-
     random.shuffle(all_words)
     all_words_copy = all_words.copy()
     return selected_words, all_words, all_words_copy
-
 
 def makeGrid(all_words):
     max_length = max(len(word) for words in categories.values() for word in words)#From ChatGPT. Finds length of longest word
@@ -87,25 +81,21 @@ def makeGrid(all_words):
         grid.append(row)
     return grid, max_length
 
-
 def printGrid(all_words, selected_words):
     grid, max_length = makeGrid(all_words)
-
+    print("Lives =",lives)
     for words_list in selected_words:
         print(words_list)
-
-
-
     for row in grid:
         print("---------------------------------------------------------")
         print("|" + "|".join([word.center(max_length) for word in row]) + "|")
         print("---------------------------------------------------------")
 
-
 def getGuesses(all_words_copy, selected_words):
     global lives
     print("(Case Sensetive) Words to choose from: ", all_words_copy)
     guesses = []
+    correct_categories = []
     correct = False
     while correct == False:
         while len(guesses) < 4:
@@ -116,20 +106,61 @@ def getGuesses(all_words_copy, selected_words):
             else:
                 closest_match = difflib.get_close_matches(guess, all_words_copy, n=1)#Using Difflib to find close matches for spelling discrepancies
                 if closest_match:
-                    print(f"Did you mean '{closest_match[0]}'? Please try again.")
+                    print(f"Did you mean '{closest_match[0]}'? Please try again.")#Asking player what they may have meant for mistakes using Difflib
                 else:
                     print("Invalid word. Please try again.")
         for words_list in selected_words:
                 if set(guesses) == set(words_list):
                     correct = True
-                    print ("Category Correct!")
+                    correct_categories.extend(words_list)
+                    print("Category Correct!")
+                    print("Categories Guessed:",correct_categories)
+                    for word in words_list:
+                        all_words_copy.pop(all_words_copy.index(word))
+                    if len(all_words_copy) <= 0:
+                        winGame()
+                        break
+                    #Remove correct word_list from selected_words and add to a new array called guessed_categories
+                    #Remove 
                     break
         if correct != True:
             lives -= 1
-            print("Incorrect guesses. Please try again. Lives = ",lives)
+            print("Incorrect guesses. Please try again. Lives =",lives)
+            if lives <= 0:
+                 loseGame()
+                 break
             guesses = []
+    getGuesses(all_words_copy, selected_words)
     return guesses
 
-selected_words, all_words, all_words_copy = chooseWords()
-printGrid(all_words, selected_words)
-getGuesses(all_words_copy, selected_words)
+def loseGame():
+    global playgame
+    playgame = False
+    print("You Lose!")
+    replay()
+
+def winGame():
+    global playgame
+    playgame = False
+    print("You Win!")
+    replay()
+
+def replay():
+    global playgame
+    playagain = ""
+    playagain = input("Would you like to play again? (y/n): ")
+    while playagain not in ["y","n"]:
+        playagain = input()
+    if playagain == "y":
+            playgame = True
+    elif playagain == "n":
+            print("Here is the original game, made by NYT")
+            sleep(3)
+            webbrowser.open("https://www.nytimes.com/games/connections")
+    else:
+            print("Choice not valid")
+
+while playgame == True:
+    selected_words, all_words, all_words_copy = chooseWords()
+    printGrid(all_words, selected_words)
+    getGuesses(all_words_copy, selected_words)
